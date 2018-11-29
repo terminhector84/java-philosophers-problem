@@ -1,181 +1,208 @@
 package ultimateSolution;
 
-
-public class Philosopher extends Thread{
-	public int philNumber;
-	public String name;
-	public boolean eating;
-	public boolean hungry;
-	public boolean thinking;
+public class NewThinker extends Thread{
 	
-	//constructor created to require initial values to be specified
-	//for philosopher number, name, 
-	//whether he is eating, and whether he is hungry.
-	public Philosopher(int philNumber, String name, boolean eating, boolean hungry, boolean thinking) {
-		this.philNumber = philNumber;
-		this.name = name;
-		this.eating = eating;
-		this.hungry = hungry;
-		this.thinking = thinking;
-		
-	}	
-	// the run method will start a philosopher eating 
-	//if he is hungry and if neither of his L or R 
-	//neighbors is eating
+		public int philNumber;
+		public int mealsAday;
+		static boolean stick0=true;	//one boolean for each chopstick
+		static boolean stick1=true;	//true means not being used.
+		static boolean stick2=true;
+		static boolean stick3=true;
+		static boolean stick4=true;
 
-	public void run() { 
-		
-		boolean eating_left;
-		
-		boolean eating_right;
-		
-		eating_left = check_left(this.philNumber);
-		
-		eating_right = check_right(this.philNumber);
-		
-		
-		if ((eating_left == false && eating_right == false) && this.hungry == true) {
+		//constructor created to require philNumber to be specified
+		public NewThinker(int philNumber, int mealsAday) {
 			
-			eat();
-			
-		}
-	
-			
-			think();
-			
-		
-		
-		
-		
-		run(); //recursive call to continually run the run()
-				//method
-			
-	}
-			
-	 //Philosopher objects. 1 and 3 are initialized at false
-	 //to prevent all five philosophers from eating simultaneously
-	 //at start.
-		static Philosopher p0 = new Philosopher(0,"Confucius", false, false, true);
-		static Philosopher p1 = new Philosopher(1, "Socrates", false, false, true);
-		static Philosopher p2 = new Philosopher(2, "Plato", false, false, true);
-		static Philosopher p3 = new Philosopher(3, "Descartes", false, false, true);
-		static Philosopher p4 = new Philosopher(4, "Sartre", false, false, true);
+			this.philNumber = philNumber;
+			this.mealsAday = mealsAday;
 
-		//Philosopher array
-		static Philosopher[] WiseTable = {p0, p1, p2, p3, p4};	
-		
+		}	
+		// the run method states that a phil is hungry and then 
+		//will start the phil objects picking up sticks. Run() calls itself recursively
 
-		
-		
-		
-		
-//		WiseTable[Math.random() * WiseTable.length()].hungry  = true; 
+		public void run() { 
+			
+			//timer in run() delays start up to 2.5 seconds
+			//to reduce occurrences of a phil eating twice in a row.
+			
+				waitt();
 				
-		
-	public static void main(String[] args) {
-			
-		
-		p0.start();		//each objects starts the run()
-		p1.start();
-		p2.start();
-		p3.start();
-		p4.start();		
-		
-		
-		
-}
-	public boolean check_right(int philNumber) {
-		
-		boolean eating_to_the_right;
-		
-		if (this.philNumber == 4) {
-			
-			eating_to_the_right = WiseTable[0].eating;
-			
-		}else {
-			
-			eating_to_the_right = WiseTable[this.philNumber + 1].eating;
-			
-		}
-			
-		return eating_to_the_right;
-	}
-	
-	public boolean check_left(int philNumber) {
-		
-		boolean eating_to_the_left;
-		
-		if (this.philNumber == 0){
-			
-			eating_to_the_left = WiseTable[4].eating;
-		}
-			
-		else {
-			
-			eating_to_the_left = WiseTable[this.philNumber - 1].eating;
-			
-		}
-			
-		return eating_to_the_left;	
-	}
-	
-	public void think() {
-		
-		System.out.println("#" + (this.philNumber + 1) + "  " +  this.name +	" is thinking... and hungry " + this.hungry  + " ?");
-		
-		double startTime = System.currentTimeMillis() + 10000;
-		
-		
-	    while(startTime > System.currentTimeMillis()) {
-	    	
-	    	this.hungry = false;
-	    	this.thinking = false;
-	    	this.eating = false;
-	    	
-	    }
-	   this.hungry = true;
-	    	
-	    	
-	}
-	    
-	
-    	public void eat() {
-    		
-    		
-    		boolean eating_left;
-    		
-    		boolean eating_right;
-    		
-    		eating_left = check_left(this.philNumber);
-    		
-    		eating_right = check_right(this.philNumber);
-    		
-    		
-  
+				System.out.println("p" + this.philNumber + 	" just got hungry");
+	            pick_up_sticks(this.philNumber);
 
-    		System.out.println("#" + (this.philNumber + 1) + "  " +  this.name +	" is eating...");
-    		
-    		double startTime = System.currentTimeMillis() + 7500;
-    		
-    		if ((eating_left == false && eating_right == false) && this.hungry == true) {
-    	    	    while(startTime > System.currentTimeMillis()) {
-    	    	    	
-    	    	    	this.eating = true;
-    	    	    	this.thinking = false;
-    	    	    	this.hungry = false;
-    	    		
-    	    	   }
-    		}else {
-    			
-    			this.eating = false;
-       	     	this.hungry = false;
-       	     	this.thinking = true;
-       	     	
-    		}
-    	    	    
-    	}
-	}
-	
-	
+	            run();
+
+		}
 		
-	
+		//NewThinker objects. 
+		static NewThinker p0 = new NewThinker(0, 0);
+		static NewThinker p1 = new NewThinker(1, 0);
+		static NewThinker p2 = new NewThinker(2, 0);
+		static NewThinker p3 = new NewThinker(3, 0);
+		static NewThinker p4 = new NewThinker(4, 0);
+
+		public static void main(String[] args) {
+
+			p0.start();		//each objects starts the run()
+			p1.start();
+			p2.start();
+			p3.start();
+			p4.start();		
+
+		}
+		
+		public static void waitt() {
+			
+			double startTime = System.currentTimeMillis() +  2000;
+
+			while(startTime > System.currentTimeMillis()){}
+			
+		}
+		
+		//synchronized method checks the philNumber, then checks if the sticks
+		//to the left and right are available (true). If they are, he will pick them up. 
+		//(set to false). After eating for a random time up to 3.5 seconds the phil
+		// will put down his sticks and call the think_and_get_hungry method.
+		
+		synchronized public static void pick_up_sticks(int phil_instance) {
+			
+			if( (phil_instance == 0) && stick4 == true && stick0 == true) {
+				
+				
+//				sticks[arr.elngth-1] && sticks[0]
+						
+				stick4 = false;
+				System.out.println("p" + phil_instance + " picked up the chopstick to his" + " left");
+				
+				stick0 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
+				
+				p0.mealsAday ++;
+				
+				System.out.println("p0 has eaten " + p0.mealsAday + " times");
+				
+				System.out.println("p" + phil_instance + " is eating...");
+				
+				waitt();
+				
+				stick4 = true;
+				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
+				
+				stick0 = true;
+				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				think(phil_instance);
+
+			}
+			else if (phil_instance == 1 && stick0 == true && stick1 == true) {
+				
+				stick0 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " left");
+				
+				stick1 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " right");
+				
+				p1.mealsAday ++;
+				System.out.println("p1 has eaten " + p1.mealsAday + " times");
+				
+				System.out.println("p" + phil_instance + " is eating...");
+				
+				waitt();
+				
+				stick0 = true;
+				System.out.println("p" + phil_instance + " put down the chopstick to his "+ " left");
+				
+				stick1 = true;
+				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				think(phil_instance);
+
+			}
+			if( (phil_instance == 2) && stick1 == true && stick2 == true) {
+				
+				stick1 = false;
+				System.out.println("p" + phil_instance + " picked up the chopstick to his "	+ " left");
+				
+				stick2 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
+				
+				p2.mealsAday ++;
+				System.out.println("p2 has eaten " + p2.mealsAday + " times");
+				
+				System.out.println("p" + phil_instance + " is eating...");
+				
+				waitt();
+				
+				stick1 = true;
+				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
+				
+				stick2 = true;
+				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				think(phil_instance);
+
+			}	
+			if( (phil_instance == 3) && stick2 == true && stick3 == true) {
+				
+				stick2 = false;
+				System.out.println("p" + phil_instance + " picked up the chopstick to his "	+ " left");
+				
+				stick3 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " right");
+				
+				p3.mealsAday ++;
+				System.out.println("p3 has eaten " + p3.mealsAday + " times");
+				
+				System.out.println("p" + phil_instance + " is eating...");
+				
+				waitt();
+				
+				stick2 = true;
+				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
+				
+				stick3 = true;
+				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				think(phil_instance);
+
+			}
+			if( (phil_instance == 4) && stick3 == true && stick4 == true) {
+				
+				stick3 = false;
+				System.out.println("p" + phil_instance + " picked up the chopstick to his " + " left");
+				
+				stick4 = false;
+				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
+				
+				p4.mealsAday ++;
+				System.out.println("p4 has eaten " + p4.mealsAday + " times");
+				
+				System.out.println("p" + phil_instance + " is eating...");
+				
+				waitt();
+				
+				stick3 = true;
+				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
+				
+				stick4 = true;
+				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				think(phil_instance);
+
+			}	   	
+		}
+		
+		//After finishing eating, the phil will start thinking again for at least
+		//3.5 seconds and up to 7 seconds. Then he will start the run() process 
+		//over again where he waits for his two chopsticks to be available.
+		
+		public static void think(int phil_instance) {
+			
+			System.out.println("p" + phil_instance + " is thinking...");
+			waitt();
+			
+		}
+
+	}
+
+//create functionality for two synchronized methods
