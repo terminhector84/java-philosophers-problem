@@ -24,12 +24,11 @@ public class NewThinker extends Thread{
 			
 				waitt();
 				
-				System.out.println("p" + this.philNumber + 	" just got hungry");
+//				System.out.println("p" + this.philNumber + 	" just got hungry");
 				
-				for(int phil = 0;phil <  thinkers.length; phil++) {
-					
-				pick_up_sticks(phil);
-				}
+			
+				pick_up_sticks(this.philNumber);
+				
 	            
 
 	            run();
@@ -57,7 +56,7 @@ public class NewThinker extends Thread{
 		
 		public static void waitt() {
 			
-			double startTime = System.currentTimeMillis() +  2000;
+			double startTime = System.currentTimeMillis() +  Math.random() * 2000;
 
 			while(startTime > System.currentTimeMillis()){}
 			
@@ -70,39 +69,32 @@ public class NewThinker extends Thread{
 		
 		synchronized public static void pick_up_sticks(int phil_instance) {
 			
-			int left = (phil_instance  % sticks.length) - 1;
-			int right = (phil_instance % sticks.length) + 1;
+			int left = (phil_instance  - 1) % sticks.length;
+			int right = (phil_instance  + 1) % sticks.length;
 			
 			if (left == -1) {
 				left = sticks.length-1;
 			}
 			
-			
-			
-			System.out.println(left + " and " + right + " the philosopher at position " + phil_instance);
-			
-			if( (phil_instance == 0) && sticks[left] == true && sticks[right] == true) {
+			if(sticks[left] == true && sticks[right] == true) {
 				
 						
 				sticks[left] = false;
-				System.out.println("p" + phil_instance + " picked up the chopstick to his" + " left");
-				
 				sticks[right] = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
 				
-				p0.mealsAday ++;
+				System.out.println("p" +phil_instance+ " picked up the chopsticks");
 				
-				System.out.println("p0 has eaten " + p0.mealsAday + " times");
+				thinkers[phil_instance].mealsAday ++;
 				
 				System.out.println("p" + phil_instance + " is eating...");
+				System.out.println("p" + phil_instance + " has eaten " + thinkers[phil_instance].mealsAday + " times");
 				
 				waitt();
 				
 				sticks[left] = true;
-				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
-				
 				sticks[right] = true;
-				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
+				
+				System.out.println("p" +phil_instance+ " puts down the chopsticks");
 				
 				think(phil_instance);
 
