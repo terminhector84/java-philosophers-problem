@@ -4,11 +4,8 @@ public class NewThinker extends Thread{
 	
 		public int philNumber;
 		public int mealsAday;
-		static boolean stick0=true;	//one boolean for each chopstick
-		static boolean stick1=true;	//true means not being used.
-		static boolean stick2=true;
-		static boolean stick3=true;
-		static boolean stick4=true;
+		static boolean[] sticks = {true, true, true, true, true};	
+	
 
 		//constructor created to require philNumber to be specified
 		public NewThinker(int philNumber, int mealsAday) {
@@ -28,7 +25,12 @@ public class NewThinker extends Thread{
 				waitt();
 				
 				System.out.println("p" + this.philNumber + 	" just got hungry");
-	            pick_up_sticks(this.philNumber);
+				
+				for(int phil = 0;phil <  thinkers.length; phil++) {
+					
+				pick_up_sticks(phil);
+				}
+	            
 
 	            run();
 
@@ -40,6 +42,8 @@ public class NewThinker extends Thread{
 		static NewThinker p2 = new NewThinker(2, 0);
 		static NewThinker p3 = new NewThinker(3, 0);
 		static NewThinker p4 = new NewThinker(4, 0);
+		
+		static NewThinker [] thinkers = {p0, p1, p2, p3, p4};
 
 		public static void main(String[] args) {
 
@@ -66,15 +70,24 @@ public class NewThinker extends Thread{
 		
 		synchronized public static void pick_up_sticks(int phil_instance) {
 			
-			if( (phil_instance == 0) && stick4 == true && stick0 == true) {
+			int left = (phil_instance  % sticks.length) - 1;
+			int right = (phil_instance % sticks.length) + 1;
+			
+			if (left == -1) {
+				left = sticks.length-1;
+			}
+			
+			
+			
+			System.out.println(left + " and " + right + " the philosopher at position " + phil_instance);
+			
+			if( (phil_instance == 0) && sticks[left] == true && sticks[right] == true) {
 				
-				
-//				sticks[arr.elngth-1] && sticks[0]
 						
-				stick4 = false;
+				sticks[left] = false;
 				System.out.println("p" + phil_instance + " picked up the chopstick to his" + " left");
 				
-				stick0 = false;
+				sticks[right] = false;
 				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
 				
 				p0.mealsAday ++;
@@ -85,111 +98,16 @@ public class NewThinker extends Thread{
 				
 				waitt();
 				
-				stick4 = true;
+				sticks[left] = true;
 				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
 				
-				stick0 = true;
+				sticks[right] = true;
 				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
 				
 				think(phil_instance);
 
 			}
-			else if (phil_instance == 1 && stick0 == true && stick1 == true) {
-				
-				stick0 = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " left");
-				
-				stick1 = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " right");
-				
-				p1.mealsAday ++;
-				System.out.println("p1 has eaten " + p1.mealsAday + " times");
-				
-				System.out.println("p" + phil_instance + " is eating...");
-				
-				waitt();
-				
-				stick0 = true;
-				System.out.println("p" + phil_instance + " put down the chopstick to his "+ " left");
-				
-				stick1 = true;
-				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
-				
-				think(phil_instance);
-
-			}
-			if( (phil_instance == 2) && stick1 == true && stick2 == true) {
-				
-				stick1 = false;
-				System.out.println("p" + phil_instance + " picked up the chopstick to his "	+ " left");
-				
-				stick2 = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
-				
-				p2.mealsAday ++;
-				System.out.println("p2 has eaten " + p2.mealsAday + " times");
-				
-				System.out.println("p" + phil_instance + " is eating...");
-				
-				waitt();
-				
-				stick1 = true;
-				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
-				
-				stick2 = true;
-				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
-				
-				think(phil_instance);
-
-			}	
-			if( (phil_instance == 3) && stick2 == true && stick3 == true) {
-				
-				stick2 = false;
-				System.out.println("p" + phil_instance + " picked up the chopstick to his "	+ " left");
-				
-				stick3 = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his "+ " right");
-				
-				p3.mealsAday ++;
-				System.out.println("p3 has eaten " + p3.mealsAday + " times");
-				
-				System.out.println("p" + phil_instance + " is eating...");
-				
-				waitt();
-				
-				stick2 = true;
-				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
-				
-				stick3 = true;
-				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
-				
-				think(phil_instance);
-
-			}
-			if( (phil_instance == 4) && stick3 == true && stick4 == true) {
-				
-				stick3 = false;
-				System.out.println("p" + phil_instance + " picked up the chopstick to his " + " left");
-				
-				stick4 = false;
-				System.out.println("p" +phil_instance+ " picked up the chopstick to his " + " right");
-				
-				p4.mealsAday ++;
-				System.out.println("p4 has eaten " + p4.mealsAday + " times");
-				
-				System.out.println("p" + phil_instance + " is eating...");
-				
-				waitt();
-				
-				stick3 = true;
-				System.out.println("p" + phil_instance + " put down the chopstick to his " + " left");
-				
-				stick4 = true;
-				System.out.println("p" +phil_instance+ " put down the chopstick to his " + " right");
-				
-				think(phil_instance);
-
-			}	   	
+	   	
 		}
 		
 		//After finishing eating, the phil will start thinking again for at least
